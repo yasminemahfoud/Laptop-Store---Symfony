@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product Store{% endblock %}
+
+{% block body %}
+
+<div class="example-wrapper">
+    <h1>Add Product</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit">Save</button>
+    {{ form_end(form) }}
+</div>
+
+{% endblock %}
