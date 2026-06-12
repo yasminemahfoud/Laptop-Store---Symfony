@@ -7,24 +7,26 @@ use App\Entity\Product;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolver; 
+use Symfony\Component\Form\Extension\Core\Type\SubmitType; 
 
 class ProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('name')
-            ->add('description')
-            ->add('price')
-            ->add('string')
-            ->add('image')
-            ->add('no')
-            ->add('vategory', EntityType::class, [
-                'class' => Category::class,
-                'choice_label' => 'id',
-            ])
-        ;
+$builder
+    ->add('name')
+    ->add('description')
+    ->add('price')
+    ->add('quantity')        // ✅ machi 'string'
+    ->add('image')
+    ->add('no')
+    ->add('category', EntityType::class, [   // ✅ machi 'vategory'
+        'class' => Category::class,
+        'choice_label' => 'name',
+    ])
+    ->add('Submit', SubmitType::class)
+;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

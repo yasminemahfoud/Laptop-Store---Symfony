@@ -23,15 +23,15 @@ class Product
     #[ORM\Column]
     private ?int $price = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $string = null;
+    #[ORM\Column]
+    private ?int $quantity = null;  // ✅ 'string' → 'quantity'
 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Category $vategory = null;
+    private ?Category $category = null;  // ✅ 'vategory' → 'category'
 
     #[ORM\Column(length: 255)]
     private ?string $no = null;
@@ -49,7 +49,6 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -61,7 +60,6 @@ class Product
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -73,19 +71,17 @@ class Product
     public function setPrice(int $price): static
     {
         $this->price = $price;
-
         return $this;
     }
 
-    public function getString(): ?string
+    public function getQuantity(): ?int  // ✅
     {
-        return $this->string;
+        return $this->quantity;
     }
 
-    public function setString(string $string): static
+    public function setQuantity(int $quantity): static  // ✅
     {
-        $this->string = $string;
-
+        $this->quantity = $quantity;
         return $this;
     }
 
@@ -97,19 +93,17 @@ class Product
     public function setImage(string $image): static
     {
         $this->image = $image;
-
         return $this;
     }
 
-    public function getVategory(): ?Category
+    public function getCategory(): ?Category  // ✅
     {
-        return $this->vategory;
+        return $this->category;
     }
 
-    public function setVategory(?Category $vategory): static
+    public function setCategory(?Category $category): static  // ✅
     {
-        $this->vategory = $vategory;
-
+        $this->category = $category;
         return $this;
     }
 
@@ -121,7 +115,6 @@ class Product
     public function setNo(string $no): static
     {
         $this->no = $no;
-
         return $this;
     }
 }
