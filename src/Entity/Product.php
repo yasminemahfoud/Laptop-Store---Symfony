@@ -26,7 +26,7 @@ class Product
     #[ORM\Column]
     private ?int $quantity = null;  // ✅ 'string' → 'quantity'
 
-    #[ORM\Column(length: 255)]
+   #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]

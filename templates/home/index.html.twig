@@ -1,12 +1,59 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Homme{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block body %}
 <div class="row">
-<div class="col-md-12">
-    <h1>Welcome to the Store!</h1>
-    </div> 
+    <div class="col-md-12">
+        <h1>Welcome to the Store!</h1>
+    </div>
 
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Create new product
+            </div>
+            <div class="card-body">
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 mt-4">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.category.name }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>
+                        {% if product.image %}
+                            <img src="{{ absolute_url('uploads/' ~ product.image) }}"
+                                 alt="{{ product.name }}"
+                                 class="img-fluid my-2 rounded" style="width:80px;">
+                        {% endif %}
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
 {% endblock %}
-
