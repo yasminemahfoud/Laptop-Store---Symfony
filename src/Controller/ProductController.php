@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ProductController extends AbstractController
@@ -19,12 +20,14 @@ class ProductController extends AbstractController
     ) {}
 
     #[Route('/product', name: 'app_product')]
-    public function index(): Response
+    public function index(CategoryRepository $categoryRepository): Response
     {
         $products = $this->productRepository->findAll();
+        $categories = $categoryRepository->findAll();
 
         return $this->render('product/index.html.twig', [
             'products' => $products,
+            'categories' => $categories,
         ]);
     }
 
@@ -98,6 +101,18 @@ class ProductController extends AbstractController
     {
         return $this->render('product/show.html.twig', [
             'product' => $product,
+        ]);
+    }
+
+    #[Route('/product/filter/{id}', name: 'app_product_filter')]
+    public function filter(int $id, CategoryRepository $categoryRepository): Response
+    {
+        $products = $this->productRepository->findBy(['category' => $id]);
+        $categories = $categoryRepository->findAll();
+
+        return $this->render('product/index.html.twig', [
+            'products' => $products,
+            'categories' => $categories,
         ]);
     }
 }
