@@ -104,6 +104,14 @@ class ProductController extends AbstractController
         ]);
     }
 
+    #[Route('/product/user/{id}', name: 'app_product_user')]
+    public function userShow(Product $product): Response
+    {
+        return $this->render('product/user.html.twig', [
+            'product' => $product,
+        ]);
+    }
+
     #[Route('/product/filter/{id}', name: 'app_product_filter')]
     public function filter(int $id, CategoryRepository $categoryRepository): Response
     {
