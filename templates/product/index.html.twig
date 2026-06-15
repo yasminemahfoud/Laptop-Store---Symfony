@@ -34,9 +34,10 @@
                     <p class="card-text">{{ product.description }}</p>
                     <p class="text-danger fw-bold">{{ product.price }}DH</p>
 
-                    <a href="{{ path('app_product_show', { id: product.id }) }}" class="btn btn-primary mt-auto">
-                        View
-                    </a>
+                   <a href="{{ path('app_product_user', { id: product.id }) }}"
+                    class="btn btn-primary mt-auto">
+                     View
+                            </a>
                 </div>
             </div>
         </div>
