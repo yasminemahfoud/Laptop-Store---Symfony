@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
+use App\Entity\Product;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,12 +45,39 @@ final class OrderController extends AbstractController
     public function updateOrderStatus(int $id, string $status): Response
     {
         $order = $this->orderRepository->find($id);
-
         $order->setStatus($status);
-        $this->entityManager->flush();
 
+        $this->entityManager->flush();
         $this->addFlash('success', 'Order status updated');
 
         return $this->redirectToRoute('order_list');
+    }
+
+    #[Route('/order/delete/{id}', name: 'order_delete')]
+    public function deleteOrder(Order $order): Response
+    {
+        $this->entityManager->remove($order);
+        $this->entityManager->flush();
+        $this->addFlash('success', 'Order was deleted');
+
+        return $this->redirectToRoute('order_list');
+    }
+
+    #[Route('/order/place/{id}', name: 'app_order_place')]
+    #[IsGranted('ROLE_USER')]
+    public function placeOrder(Product $product): Response
+    {
+        $order = new Order();
+        $order->setPname($product->getName());
+        $order->setPrice($product->getPrice());
+        $order->setStatus('processing...');
+        $order->setUser($this->getUser());
+
+        $this->entityManager->persist($order);
+        $this->entityManager->flush();
+
+        $this->addFlash('success', 'Your order was placed!');
+
+        return $this->redirectToRoute('app_user_orders');
     }
 }
