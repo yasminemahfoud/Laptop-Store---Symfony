@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,14 +14,17 @@ final class OrderController extends AbstractController
 {
     public function __construct(
         private ProductRepository $productRepository,
+        private OrderRepository $orderRepository,
         private EntityManagerInterface $entityManager
     ) {}
 
-    #[Route('/order', name: 'app_order')]
+    #[Route('/orders', name: 'order_list')]
     public function index(): Response
     {
+        $orders = $this->orderRepository->findAll();
+
         return $this->render('order/index.html.twig', [
-            'controller_name' => 'OrderController',
+            'orders' => $orders
         ]);
     }
 
@@ -33,5 +37,18 @@ final class OrderController extends AbstractController
         return $this->render('order/user_orders.html.twig', [
             'orders' => $user->getOrders(),
         ]);
+    }
+
+    #[Route('/order/status/{id}/{status}', name: 'order_status_update')]
+    public function updateOrderStatus(int $id, string $status): Response
+    {
+        $order = $this->orderRepository->find($id);
+
+        $order->setStatus($status);
+        $this->entityManager->flush();
+
+        $this->addFlash('success', 'Order status updated');
+
+        return $this->redirectToRoute('order_list');
     }
 }

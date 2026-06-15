@@ -1,20 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello OrderController!{% endblock %}
+{% block title %}Orders List{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Orders List</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/Hassan/Desktop/Laptop_Store/src/Controller/OrderController.php</code></li>
-        <li>Your template at <code>C:/Users/Hassan/Desktop/Laptop_Store/templates/order/index.html.twig</code></li>
-    </ul>
-</div>
+    {% if orders|length > 0 %}
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ order.pname }}</td>
+                        <td>{{ order.price }} DH</td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton{{ order.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ order.status }}
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ order.id }}">
+                                    <li><a class="dropdown-item" href="{{ path('order_status_update', { id: order.id, status: 'Rejected...' }) }}">Rejected</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('order_status_update', { id: order.id, status: 'shipped' }) }}">Shipped</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>ma kayn hta order daba.</p>
+    {% endif %}
 {% endblock %}
