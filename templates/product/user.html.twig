@@ -28,15 +28,32 @@
 
         </div>
     </div>
-
+    {%set sum=0%}
     {% for oder in user.orders %}
+    {%set sum =sum + order.price %}
     <tr>
     <td>{{loop.index}}</td>
     <td>{{order.name}}</td>
     <td>{{Product.Price}}</td>
+    <td>
+    {%if order.status =='processing...'%}
+    <span class="badge bg-dark p-2">
+     {{order.status }}
+     </span>
+    {% elseif order.status=='shipped' %}
+    <span class="badge bg-danger p-2">
+     {{order.status }}
+     </span>
+    {% else  %} 
+    {% endif %}
 
+</td>
 </tr>
- {% endfor %}                  
+ {% endfor %} 
+ <tr class="text-center">
+    <th colspan="3">total</th>
+    <td class="fw-bold">{{sum}}DH </td>
+ </tr>                 
                 </div>
             </div>
         </div>
