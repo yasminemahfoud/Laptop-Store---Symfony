@@ -11,7 +11,7 @@ use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-
+use Sesion\Bundle\frameworkExtraBundle\Congigution\Isgranted;
 class ProductController extends AbstractController
 {
     public function __construct(
@@ -20,6 +20,11 @@ class ProductController extends AbstractController
     ) {}
 
     #[Route('/product', name: 'app_product')]
+
+/**
+ * @Isgranted ("ROLE_ADMIN, statusCode=404, message="page not fond  " ) 
+ */
+
     public function index(CategoryRepository $categoryRepository): Response
     {
         $products = $this->productRepository->findAll();
@@ -28,6 +33,18 @@ class ProductController extends AbstractController
         return $this->render('product/index.html.twig', [
             'products' => $products,
             'categories' => $categories,
+        ]);
+    }
+
+    #[Route('/admin/products', name: 'app_product_admin')]
+  
+
+    public function adminIndex(): Response
+    {
+        $products = $this->productRepository->findAll();
+
+        return $this->render('product/admin_index.html.twig', [
+            'products' => $products,
         ]);
     }
 
@@ -60,6 +77,11 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/edit/{id}', name: 'app_product_edit')]
+    
+    /**
+ * @Isgranted ("ROLE_ADMIN, statusCode=404, message="page not fond  " ) 
+ */
+
     public function edit(Request $request, Product $product): Response
     {
         $form = $this->createForm(ProductType::class, $product);
@@ -87,6 +109,11 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/delete/{id}', name: 'app_product_delete')]
+
+    /**
+ * @Isgranted ("ROLE_ADMIN, statusCode=404, message="page not fond  " ) 
+ */
+
     public function delete(Product $product): Response
     {
         $this->entityManager->remove($product);

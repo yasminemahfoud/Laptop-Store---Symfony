@@ -21,6 +21,10 @@ final class OrderController extends AbstractController
     ) {}
 
     #[Route('/orders', name: 'order_list')]
+    /**
+ * @Isgranted ("ROLE_ADMIN, statusCode=404, message="page not fond  " ) 
+ */
+
     public function index(): Response
     {
         $orders = $this->orderRepository->findAll();
@@ -42,6 +46,11 @@ final class OrderController extends AbstractController
     }
 
     #[Route('/order/status/{id}/{status}', name: 'order_status_update')]
+
+    /**
+ * @Isgranted ("ROLE_ADMIN, statusCode=404, message="page not fond  " ) 
+ */
+
     public function updateOrderStatus(int $id, string $status): Response
     {
         $order = $this->orderRepository->find($id);
@@ -54,6 +63,11 @@ final class OrderController extends AbstractController
     }
 
     #[Route('/order/delete/{id}', name: 'order_delete')]
+
+    /**
+ * @Isgranted ("ROLE_ADMIN, statusCode=404, message="page not fond  " ) 
+ */
+
     public function deleteOrder(Order $order): Response
     {
         $this->entityManager->remove($order);
