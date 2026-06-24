@@ -2,27 +2,237 @@
 
 {% block title %}Products{% endblock %}
 
+{% block stylesheets %}
+<style>
+/* ── Brand Filter Bar ── */
+.brand-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.brand-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    background: #fff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    min-width: 90px;
+    height: 52px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+
+.brand-btn:hover {
+    border-color: #333;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.13);
+    transform: translateY(-2px);
+}
+
+.brand-btn.active {
+    border-color: #111;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+}
+
+/* ALL button */
+.brand-btn.btn-all {
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    background: #111;
+    border-color: #111;
+    letter-spacing: 1px;
+}
+.brand-btn.btn-all:hover {
+    background: #333;
+    border-color: #333;
+}
+
+/* ── Logo Styles per Brand ── */
+
+/* HP */
+.logo-hp {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.logo-hp .hp-circle {
+    width: 32px;
+    height: 32px;
+    background: #0096D6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: 'Arial Black', sans-serif;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+.logo-hp span {
+    color: #0096D6;
+    font-family: 'Arial Black', sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+}
+
+/* LENOVO */
+.logo-lenovo {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.logo-lenovo .len-red { color: #E2231A; }
+.logo-lenovo .len-black { color: #1a1a1a; }
+
+/* DELL */
+.logo-dell {
+    font-family: 'Arial', sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: #007DB8;
+    letter-spacing: 2px;
+    font-style: italic;
+}
+
+/* APPLE / MAC */
+.logo-apple {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+.logo-apple .apple-icon {
+    font-size: 22px;
+    color: #1d1d1f;
+    line-height: 1;
+}
+.logo-apple span {
+    color: #1d1d1f;
+    font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* ── Product Cards ── */
+.product-card {
+    border: none;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+}
+.product-card img {
+    height: 180px;
+    object-fit: cover;
+    background: #f5f5f5;
+}
+.product-card .card-body {
+    padding: 14px;
+}
+.product-card .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+}
+.product-card .price-tag {
+    color: #e53935;
+    font-weight: 700;
+    font-size: 16px;
+}
+.product-card .btn-view {
+    background: #111;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 0;
+    font-size: 14px;
+    font-weight: 600;
+    width: 100%;
+    transition: background 0.2s;
+}
+.product-card .btn-view:hover {
+    background: #333;
+    color: white;
+}
+</style>
+{% endblock %}
+
 {% block body %}
 <div class="row">
-    <div class="col-md-12 d-flex justify-content-between align-items-center mb-4">
-        <h2>
+    <div class="col-md-12 d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+
+        <h2 class="mb-0">
             Products
             <span class="badge bg-danger rounded-circle">{{ products|length }}</span>
         </h2>
 
-        <div class="btn-group">
-            <a href="{{ path('app_product') }}" class="btn btn-outline-dark">All</a>
+        {# ── Brand Filter Buttons ── #}
+        <div class="brand-filter-bar">
+
+            {# ALL #}
+            <a href="{{ path('app_product') }}" class="brand-btn btn-all">ALL</a>
+
+            {# Dynamic categories avec logos #}
             {% for category in categories %}
-                <a href="{{ path('app_product_filter', { id: category.id }) }}" class="btn btn-outline-dark">
-                    {{ category.name }}
+                {% set catName = category.name|upper %}
+                <a href="{{ path('app_product_filter', { id: category.id }) }}"
+                   class="brand-btn {% if app.request.attributes.get('id') == category.id %}active{% endif %}">
+
+                    {% if catName == 'HP' %}
+                        <div class="logo-hp">
+                            <div class="hp-circle">hp</div>
+                            <span>HP</span>
+                        </div>
+
+                    {% elseif catName == 'LENOVO' %}
+                        <div class="logo-lenovo">
+                            <span class="len-red">Len</span><span class="len-black">ovo</span>
+                        </div>
+
+                    {% elseif catName == 'DELL' %}
+                        <div class="logo-dell">DELL</div>
+
+                    {% elseif catName == 'MAC' or catName == 'APPLE' %}
+                        <div class="logo-apple">
+                            <span class="apple-icon">&#xf8ff;</span>
+                            <span>Apple</span>
+                        </div>
+
+                    {% elseif catName == 'ASUS' %}
+                        <span style="font-family: Arial; font-weight: 900; font-size: 16px; color: #1a1a1a; letter-spacing: 1px;">ASUS</span>
+
+                    {% elseif catName == 'MSI' %}
+                        <span style="font-family: Arial; font-weight: 900; font-size: 16px; color: #c8102e; letter-spacing: 1px;">MSI</span>
+
+                    {% elseif catName == 'ACER' %}
+                        <span style="font-family: Arial; font-weight: 700; font-size: 16px; color: #83b81a; letter-spacing: 1px;">acer</span>
+
+                    {% else %}
+                        <span style="font-weight: 600; color: #333; font-size: 14px;">{{ category.name }}</span>
+                    {% endif %}
+
                 </a>
             {% endfor %}
+
         </div>
     </div>
 
+    {# ── Product Grid ── #}
     {% for product in products %}
         <div class="col-md-3 mb-4">
-            <div class="card h-100">
+            <div class="card product-card h-100">
                 {% if product.image %}
                     <img src="{{ asset('uploads/' ~ product.image) }}" class="card-img-top" alt="{{ product.name }}">
                 {% else %}
@@ -31,18 +241,19 @@
 
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">{{ product.description }}</p>
-                    <p class="text-danger fw-bold">{{ product.price }}DH</p>
-
-                   <a href="{{ path('app_product_user', { id: product.id }) }}"
-                    class="btn btn-primary mt-auto">
-                     View
-                            </a>
+                    <p class="card-text text-muted" style="font-size:13px;">{{ product.description|slice(0, 60) }}{% if product.description|length > 60 %}...{% endif %}</p>
+                    <p class="price-tag mt-auto mb-2">{{ product.price }} DH</p>
+                    <a href="{{ path('app_product_user', { id: product.id }) }}" class="btn btn-view">
+                        View
+                    </a>
                 </div>
             </div>
         </div>
     {% else %}
-        <p>No products found.</p>
+        <div class="col-12 text-center py-5">
+            <p class="text-muted fs-5">No products found.</p>
+        </div>
     {% endfor %}
+
 </div>
 {% endblock %}

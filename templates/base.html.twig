@@ -4,9 +4,10 @@
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
+
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        {% endblock %}
+
+        {% block stylesheets %}{% endblock %}
 
         {% block javascripts %}
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -29,7 +30,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ path('Home') }}">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">Home</a>
+
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('app_user_orders') }}">Orders</a>
@@ -57,10 +59,10 @@
                                 Admin
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="adminDropdown">
-                              <li><a class="dropdown-item" href="{{ path('app_product') }}">Products</a></li>
-                                  <li><a class="dropdown-item" href="{{ path('app_product_create') }}">Create Product</a></li>
-                                  <li><a class="dropdown-item" href="{{ path('order_list') }}">Orders</a></li>
-                                  <li><a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a></li>
+                                <li><a class="dropdown-item" href="{{ path('app_product') }}">Products</a></li>
+                                <li><a class="dropdown-item" href="{{ path('app_product_create') }}">Create Product</a></li>
+                                <li><a class="dropdown-item" href="{{ path('order_list') }}">Orders</a></li>
+                                <li><a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a></li>
                             </ul>
                         </li>
                     </ul>
