@@ -10,7 +10,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                   <th>UseName</th>
+                    <th>Username</th>
                     <th>Product Name</th>
                     <th>Price</th>
                     <th>Status</th>
@@ -21,22 +21,37 @@
                 {% for order in orders %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ order.Username }}</td>
+                        <td>{{ order.user.username }}</td>
                         <td>{{ order.pname }}</td>
                         <td>{{ order.price }} DH</td>
                         <td>
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton{{ order.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="btn btn-secondary dropdown-toggle"
+                                        type="button"
+                                        data-bs-toggle="dropdown">
                                     {{ order.status }}
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ order.id }}">
-                                    <li><a class="dropdown-item" href="{{ path('order_status_update', { id: order.id, status: 'shipped' }) }}">Shipped</a></li>
-                                    <li><a class="dropdown-item" href="{{ path('order_status_update', { id: order.id, status: 'Rejected' }) }}">Rejected</a></li>
+
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="{{ path('order_status_update', {id: order.id, status: 'Shipped'}) }}">
+                                            Shipped
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="{{ path('order_status_update', {id: order.id, status: 'Rejected'}) }}">
+                                            Rejected
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </td>
                         <td>
-                            <a href="{{ path('order_delete', { id: order.id }) }}" class="btn btn-sm btn-danger">
+                            <a href="{{ path('order_delete', {id: order.id}) }}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Are you sure?')">
                                 Delete
                             </a>
                         </td>
@@ -45,6 +60,6 @@
             </tbody>
         </table>
     {% else %}
-        <p>ma kayn hta order daba.</p>
+        <p>No orders found.</p>
     {% endif %}
 {% endblock %}
