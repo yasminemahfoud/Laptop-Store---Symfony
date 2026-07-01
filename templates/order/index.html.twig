@@ -21,7 +21,7 @@
                 {% for order in orders %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ order.Username }}</td>
+                        <td>{{ order.user.username }}</td>
                         <td>{{ order.pname }}</td>
                         <td>{{ order.price }} DH</td>
                         <td>
