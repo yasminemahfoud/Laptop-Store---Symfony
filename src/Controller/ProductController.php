@@ -2,29 +2,26 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
+use App\Form\ProductType;
+use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Entity\Product;
-use App\Form\ProductType;
-use App\Repository\ProductRepository;
-use App\Repository\CategoryRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Sesion\Bundle\frameworkExtraBundle\Congigution\Isgranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 class ProductController extends AbstractController
 {
     public function __construct(
         private ProductRepository $productRepository,
         private EntityManagerInterface $entityManager
-    ) {}
+    ) {
+    }
 
     #[Route('/product', name: 'app_product')]
-
-/**
- * @Isgranted ("ROLE_ADMIN, statusCode=404, message="page not fond  " ) 
- */
-
     public function index(CategoryRepository $categoryRepository): Response
     {
         $products = $this->productRepository->findAll();
@@ -37,8 +34,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/admin/products', name: 'app_product_admin')]
-  
-
+    #[IsGranted('ROLE_ADMIN', statusCode: 404, message: 'Page not found')]
     public function adminIndex(): Response
     {
         $products = $this->productRepository->findAll();
@@ -49,6 +45,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/create', name: 'app_product_create')]
+    #[IsGranted('ROLE_ADMIN', statusCode: 404, message: 'Page not found')]
     public function create(Request $request): Response
     {
         $product = new Product();
@@ -59,13 +56,17 @@ class ProductController extends AbstractController
             $imageFile = $form->get('image')->getData();
 
             if ($imageFile) {
-                $image_name = time() . '_' . $imageFile->getClientOriginalName();
-                $imageFile->move($this->getParameter('image_directory'), $image_name);
-                $product->setImage($image_name);
+                $imageName = time() . '_' . $imageFile->getClientOriginalName();
+                $imageFile->move(
+                    $this->getParameter('image_directory'),
+                    $imageName
+                );
+                $product->setImage($imageName);
             }
 
             $this->entityManager->persist($product);
             $this->entityManager->flush();
+
             $this->addFlash('success', 'Product created successfully');
 
             return $this->redirectToRoute('app_product');
@@ -77,11 +78,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/edit/{id}', name: 'app_product_edit')]
-    
-    /**
- * @Isgranted ("ROLE_ADMIN, statusCode=404, message="page not fond  " ) 
- */
-
+    #[IsGranted('ROLE_ADMIN', statusCode: 404, message: 'Page not found')]
     public function edit(Request $request, Product $product): Response
     {
         $form = $this->createForm(ProductType::class, $product);
@@ -91,12 +88,16 @@ class ProductController extends AbstractController
             $imageFile = $form->get('image')->getData();
 
             if ($imageFile) {
-                $image_name = time() . '_' . $imageFile->getClientOriginalName();
-                $imageFile->move($this->getParameter('image_directory'), $image_name);
-                $product->setImage($image_name);
+                $imageName = time() . '_' . $imageFile->getClientOriginalName();
+                $imageFile->move(
+                    $this->getParameter('image_directory'),
+                    $imageName
+                );
+                $product->setImage($imageName);
             }
 
             $this->entityManager->flush();
+
             $this->addFlash('success', 'Product updated successfully');
 
             return $this->redirectToRoute('app_product');
@@ -109,21 +110,19 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/delete/{id}', name: 'app_product_delete')]
-
-    /**
- * @Isgranted ("ROLE_ADMIN, statusCode=404, message="page not fond  " ) 
- */
-
+    #[IsGranted('ROLE_ADMIN', statusCode: 404, message: 'Page not found')]
     public function delete(Product $product): Response
     {
         $this->entityManager->remove($product);
         $this->entityManager->flush();
+
         $this->addFlash('success', 'Product deleted successfully');
 
         return $this->redirectToRoute('app_product');
     }
 
     #[Route('/product/show/{id}', name: 'app_product_show')]
+    #[IsGranted('ROLE_ADMIN', statusCode: 404, message: 'Page not found')]
     public function show(Product $product): Response
     {
         return $this->render('product/show.html.twig', [
@@ -142,7 +141,10 @@ class ProductController extends AbstractController
     #[Route('/product/filter/{id}', name: 'app_product_filter')]
     public function filter(int $id, CategoryRepository $categoryRepository): Response
     {
-        $products = $this->productRepository->findBy(['category' => $id]);
+        $products = $this->productRepository->findBy([
+            'category' => $id
+        ]);
+
         $categories = $categoryRepository->findAll();
 
         return $this->render('product/index.html.twig', [

@@ -21,16 +21,13 @@ final class OrderController extends AbstractController
     ) {}
 
     #[Route('/orders', name: 'order_list')]
-    /**
- * @Isgranted ("ROLE_ADMIN, statusCode=404, message="page not fond  " ) 
- */
-
+    #[IsGranted('ROLE_ADMIN', statusCode: 404, message: 'Page not found')]
     public function index(): Response
     {
         $orders = $this->orderRepository->findAll();
 
         return $this->render('order/index.html.twig', [
-            'orders' => $orders
+            'orders' => $orders,
         ]);
     }
 
@@ -46,32 +43,31 @@ final class OrderController extends AbstractController
     }
 
     #[Route('/order/status/{id}/{status}', name: 'order_status_update')]
-
-    /**
- * @Isgranted ("ROLE_ADMIN, statusCode=404, message="page not fond  " ) 
- */
-
+    #[IsGranted('ROLE_ADMIN', statusCode: 404, message: 'Page not found')]
     public function updateOrderStatus(int $id, string $status): Response
     {
         $order = $this->orderRepository->find($id);
+
+        if (!$order) {
+            throw $this->createNotFoundException('Order not found');
+        }
+
         $order->setStatus($status);
 
         $this->entityManager->flush();
+
         $this->addFlash('success', 'Order status updated');
 
         return $this->redirectToRoute('order_list');
     }
 
     #[Route('/order/delete/{id}', name: 'order_delete')]
-
-    /**
- * @Isgranted ("ROLE_ADMIN, statusCode=404, message="page not fond  " ) 
- */
-
+    #[IsGranted('ROLE_ADMIN', statusCode: 404, message: 'Page not found')]
     public function deleteOrder(Order $order): Response
     {
         $this->entityManager->remove($order);
         $this->entityManager->flush();
+
         $this->addFlash('success', 'Order was deleted');
 
         return $this->redirectToRoute('order_list');
@@ -82,6 +78,7 @@ final class OrderController extends AbstractController
     public function placeOrder(Product $product): Response
     {
         $order = new Order();
+
         $order->setPname($product->getName());
         $order->setPrice($product->getPrice());
         $order->setStatus('processing...');
