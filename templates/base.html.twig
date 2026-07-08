@@ -21,35 +21,49 @@
         {% endif %}
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
+       <nav class="navbar navbar-expand-lg navbar-dark py-2" style="background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%); min-height: 56px;">
+
+    <div class="container-fluid">
+     <a class="navbar-brand d-flex align-items-center gap-2" href="{{ path('app_home') }}" style="padding-top: 0; padding-bottom: 0;">
+    <span style="font-size: 20px;">💻</span>
+    <span style="font-weight: 800; letter-spacing: 0.5px;">
+        <span style="color: #ffd700;">Y&H</span>_computer
+    </span>
+    </a>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">Home</a>
-
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('app_user_orders') }}">Orders</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_ai') }}">
+                                AI Assistant
+                            </a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Account
                             </a>
+
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 {% if not app.user %}
                                     <li><a class="dropdown-item" href="{{ path('app_register') }}">Sign Up</a></li>
                                     <li><a class="dropdown-item" href="{{ path('app_login') }}">Sign In</a></li>
+
                                 {% else %}
                                     <li><a class="dropdown-item" href="#">{{ app.user.username }}</a></li>
                                     <li><a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a></li>
                                 {% endif %}
                             </ul>
                         </li>
+
                     </ul>
 
                     {% if is_granted('ROLE_ADMIN') %}
@@ -64,9 +78,7 @@
                                 <li><a class="dropdown-item" href="{{ path('order_list') }}">Orders</a></li>
                                 <li><a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a></li>
                                 <li>
-                                 <a class="dropdown-item" href="{{ path('app_product_admin') }}">
-                                       List Products
-                                 </a>
+                                 <a class="dropdown-item" href="{{ path('app_product_admin') }}">list Products</a>
                                </li>
                             </ul>
                         </li>

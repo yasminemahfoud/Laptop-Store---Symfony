@@ -7,6 +7,8 @@ use App\Entity\Product;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -68,7 +70,7 @@ final class OrderController extends AbstractController
         $this->entityManager->remove($order);
         $this->entityManager->flush();
 
-        $this->addFlash('success', 'Order was deleted');
+        $this->addFlash('success', 'Order deleted successfully.');
 
         return $this->redirectToRoute('order_list');
     }
@@ -87,7 +89,64 @@ final class OrderController extends AbstractController
         $this->entityManager->persist($order);
         $this->entityManager->flush();
 
-        $this->addFlash('success', 'Your order was placed!');
+        // ==========================
+        // Send Email to Admin
+        // ==========================
+
+        $mail = new PHPMailer(true);
+
+        try {
+
+            $mail->isSMTP();
+            $mail->Host = 'sandbox.smtp.mailtrap.io';
+            $mail->SMTPAuth = true;
+            $mail->Username = '59ed97a334375b';
+            $mail->Password = '9221a2e3558218';
+            $mail->Port = 2525;
+
+            $mail->setFrom('store@laptop.com', 'Laptop Store');
+            $mail->addAddress('mahfoudyasmine@gmail.com');
+
+            $mail->isHTML(true);
+            $mail->Subject = 'New Order Received';
+
+            $mail->Body = '
+                <h2>New Order</h2>
+
+                <table border="1" cellpadding="10" cellspacing="0">
+                    <tr>
+                        <th>Customer</th>
+                        <td>'.$this->getUser()->getUsername().'</td>
+                    </tr>
+
+                    <tr>
+                        <th>Product</th>
+                        <td>'.$product->getName().'</td>
+                    </tr>
+
+                    <tr>
+                        <th>Price</th>
+                        <td>'.$product->getPrice().' DH</td>
+                    </tr>
+
+                    <tr>
+                        <th>Status</th>
+                        <td>Processing...</td>
+                    </tr>
+                </table>
+
+                <br>
+
+                <p>A new customer has placed an order on the Laptop Store website.</p>
+            ';
+
+            $mail->send();
+
+        } catch (Exception $e) {
+            // Ignore email errors
+        }
+
+        $this->addFlash('success', 'Your order was placed successfully.');
 
         return $this->redirectToRoute('app_user_orders');
     }

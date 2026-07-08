@@ -1,0 +1,16 @@
+* [33m646af6d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m refacture:supprimmer api key
+* [33ma2ac229[m features:ajouter option de chat bot au base de AI
+* [33m67cc95c[m Features:ajouteroption d'envoi un mail si un  client ajouter une cmd
+*   [33ma6541bf[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge branch 'main' of https://github.com/yasminemahfoud/Laptop-Store---Symfony
+[32m|[m[33m\[m  
+[32m|[m *   [33m59fd653[m Merge branch 'HASSANASSAID:main' into main
+[32m|[m [34m|[m[35m\[m  
+* [34m|[m [35m\[m   [33m67d587b[m Merge remote-tracking branch 'upstream/main'
+[34m|[m[35m\[m [34m\[m [35m\[m  
+[34m|[m [35m|[m[34m/[m [35m/[m  
+[34m|[m[34m/[m[35m|[m [35m/[m   
+[34m|[m [35m|[m[35m/[m    
+[34m|[m * [33m63cb8a6[m[33m ([m[1;31mupstream/main[m[33m, [m[1;31mupstream/HEAD[m[33m)[m Ajout des photos produits et modifications templates
+[34m|[m * [33m47efc8f[m Add database dump for collaborators
+* [1;31m|[m [33m6e1a565[m refactor:changer le style de tableau des produits
+* [1;31m|[m [33mcfe7551[m refactor:ajouter message quand n'a pas order+boutton a un lien vers la page product
